@@ -1,0 +1,375 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Air Theme One",
+    "theme_version": "1.0.0",
+    "theme_author": "Shopify",
+    "theme_documentation_url": "https:\/\/github.com\/airthemeone\/shopify",
+    "theme_support_url": "https:\/\/github.com\/airthemeone\/shopify\/issues"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "color",
+        "id": "button_primary",
+        "label": {
+          "en": "Primary Background"
+        },
+        "default": "#5A67D8"
+      },
+      {
+        "type": "color",
+        "id": "button_primary_hover",
+        "label": {
+          "en": "Primary Background - Hover"
+        },
+        "default": "#667EEA"
+      },
+      {
+        "type": "color",
+        "id": "button_primary_text",
+        "label": {
+          "en": "Primary text"
+        },
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "button_seconday",
+        "label": {
+          "en": "Secondary Background"
+        },
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "button_seconday_hover",
+        "label": {
+          "en": "Secondary Background - Hover"
+        },
+        "default": "#F7FAFC"
+      },
+      {
+        "type": "color",
+        "id": "button_seconday_text",
+        "label": {
+          "en": "Secondary Text"
+        },
+        "default": "#4A5568"
+      },
+      {
+        "type": "header",
+        "content": "Font Colors"
+      },
+      {
+        "type": "color",
+        "id": "font_color_color_light",
+        "label": {
+          "en": "Light"
+        },
+        "default": "#A0AEC0"
+      },
+      {
+        "type": "color",
+        "id": "font_color_color_dark",
+        "label": {
+          "en": "Dark"
+        },
+        "default": "#4A5568"
+      },
+      {
+        "type": "color",
+        "id": "font_color_color_darkest",
+        "label": {
+          "en": "Darekest"
+        },
+        "default": "#1A202C"
+      },
+      {
+        "type": "header",
+        "content": "Image Overlays"
+      },
+      {
+        "type": "select",
+        "id": "color_image_overlay_text",
+        "label": "Text",
+        "default": "white",
+        "options": [
+          {
+            "value": "white",
+            "label": "White"
+          },
+          {
+            "value": "black",
+            "label": "Black"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_image_overlay_background",
+        "label": "Background",
+        "default": "gray-400",
+        "options": [
+          {
+            "value": "gray-100",
+            "label": "Gray 100"
+          },
+          {
+            "value": "gray-200",
+            "label": "Gray 200"
+          },
+          {
+            "value": "gray-300",
+            "label": "Gray 300"
+          },
+          {
+            "value": "gray-400",
+            "label": "Gray 400"
+          },
+          {
+            "value": "gray-500",
+            "label": "Gray 500"
+          },
+          {
+            "value": "gray-600",
+            "label": "Gray 600"
+          },
+          {
+            "value": "gray-700",
+            "label": "Gray 700"
+          },
+          {
+            "value": "gray-800",
+            "label": "Gray 800"
+          },
+          {
+            "value": "gray-900",
+            "label": "Gray 900"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_image_overlay_opacity",
+        "label": "Opacity",
+        "default": "25",
+        "options": [
+          {
+            "value": "100",
+            "label": "100%"
+          },
+          {
+            "value": "75",
+            "label": "75%"
+          },
+          {
+            "value": "50",
+            "label": "50%"
+          },
+          {
+            "value": "25",
+            "label": "25%"
+          },
+          {
+            "value": "0",
+            "label": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "use_local_font",
+        "label": {
+          "en": "Use local font"
+        },
+        "default": true,
+        "info": "Use the computer's local sans font, much faster loading"
+      },
+      {
+        "id": "text_font",
+        "label": {
+          "en": "Font"
+        },
+        "type": "font_picker",
+        "default": "helvetica_n4"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_local_font_header",
+        "label": {
+          "en": "Use local font - Header"
+        },
+        "default": true,
+        "info": "Use the computer's local sans font, much faster loading"
+      },
+      {
+        "id": "header_font",
+        "label": {
+          "en": "Headers"
+        },
+        "type": "font_picker",
+        "default": "helvetica_n4"
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Social media"
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": {
+          "en": "Social sharing image"
+        }
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": {
+          "en": "Image"
+        },
+        "info": {
+          "en": "Shown when sharing a link on social media. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/troubleshooting\/showing-social-media-thumbnail-images\/) about image thumbnails."
+        }
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Social media accounts"
+    },
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": {
+          "en": "Facebook"
+        },
+        "info": {
+          "en": "https:\/\/www.facebook.com\/airthemeone"
+        }
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": {
+          "en": "Instagram"
+        },
+        "info": {
+          "en": "https:\/\/instagram.com\/airthemeone"
+        }
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": {
+          "en": "Youtube"
+        },
+        "info": {
+          "en": "https:\/\/youtube.com\/airthemeone"
+        }
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": {
+          "en": "Snapchat"
+        },
+        "info": {
+          "en": "https:\/\/www.snapchat.com\/add\/airthemeone"
+        }
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": {
+          "en": "Twitter"
+        },
+        "info": {
+          "en": "https:\/\/twitter.com\/airthemeone"
+        }
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": {
+          "en": "Pinterest"
+        },
+        "info": {
+          "en": "https:\/\/www.pinterest.com\/airthemeone"
+        }
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": {
+          "en": "TikTok"
+        },
+        "info": {
+          "en": "https:\/\/www.tiktok.com\/airthemeone"
+        }
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": {
+          "en": "tumblr"
+        },
+        "info": {
+          "en": "http:\/\/airthemeone.tumblr.com"
+        }
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Favicon"
+    },
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": {
+          "en": "Favicon image"
+        },
+        "info": {
+          "en": "Will be scaled down to 32 x 32px"
+        }
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Cart"
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Agree to terms"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_tos",
+        "label": "Show 'agree to terms' checkbox",
+        "default": true
+      },
+      {
+        "type": "page",
+        "id": "tos_page",
+        "label": "Select 'Agree to terms' page"
+      }
+    ]
+  }
+]

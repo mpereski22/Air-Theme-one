@@ -1,0 +1,49 @@
+<div class="container mx-auto px-2 sm:px-4 xl:px-0">
+    {% if section.settings.link != blank %}
+        <a href="{{ section.settings.link }}">
+    {% endif %}
+
+    {% include 'image', image_object: section.settings.image, alt: section.settings.image.alt, disable_lazyload: section.settings.disable_lazyload %}
+
+    {% if section.settings.link != blank %}
+        </a>
+    {% endif %}
+</div>
+
+{% schema %}
+    {
+        "name": "Image",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+				"type": "url",
+				"id": "link",
+				"label": {
+					"en": "Link"
+				},
+				"info": {
+					"en": "Optional"
+				}
+			},
+            {
+                "type": "checkbox",
+                "id": "disable_lazyload",
+                "label": {
+                    "en": "Disable Lazyload"
+                },
+                "default": false
+            }
+        ],
+        "presets": [
+            {
+                "name": "Image",
+                "category": "Image",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

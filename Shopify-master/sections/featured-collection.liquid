@@ -1,0 +1,185 @@
+<div id="collection-{{ section.id }}" class="container mx-auto px-2 sm:px-4 xl:px-0">
+    {% if section.settings.title != blank %}
+      <div class="">
+        <h2 class="text-font-color-darkest font-bold text-3xl leading-8 mb-6 text-center">{{ section.settings.title | escape }}</h2>
+      </div>
+    {% endif %}
+  
+    {%- assign collection = collections[section.settings.collection] -%}
+  
+	<div class="grid gap-4 {{ section.settings.per_row_sm }} {{ section.settings.per_row_md }} {{ section.settings.per_row_lg }}">
+    	{% for product in collection.products limit: section.settings.product_limit %}
+      	{% include 'product-card-grid', hide_add_to_cart: section.settings.hide_add_to_cart %}
+    	{% endfor %}
+  	</div>
+
+  
+    {% if section.settings.show_view_all %}
+      <div class="flex justify-center w-full mt-6">
+        <a 
+          href="{{ collection.url }}"
+          class="inline-flex items-center mt-3 md:mt-5 justify-center py-2 px-8 border border-gray-300 border-transparent text-base leading-6 no-underline font-medium rounded-md text-button-primary-text bg-button-primary hover:bg-button-primary-hover focus:outline-none focus:bg-button-primary-hover focus:shadow-outline-primary active:bg-button-primary-hover transition ease-in-out duration-150"
+        >
+          {{ 'collections.general.view_all' | t }}
+        </a>
+      </div>
+      
+    {% endif %}
+  
+</div>
+  
+  
+  
+{% schema %}
+{
+	"name": {
+		"en": "Featured collection"
+	},
+	"class": "index-section",
+	"settings": [{
+			"type": "text",
+			"id": "title",
+			"label": {
+				"en": "Heading"
+			},
+			"default": {
+				"en": "Featured collection"
+			}
+		},
+		{
+			"id": "collection",
+			"type": "collection",
+			"label": {
+				"en": "Collection"
+			}
+		},
+		{
+			"type": "range",
+			"id": "product_limit",
+			"label": {
+				"en": "Products"
+			},
+			"min": 1,
+			"max": 48,
+			"step": 1,
+			"default": 8
+		},
+		{
+			"type": "select",
+			"id": "per_row_sm",
+			"label": { 
+				"en": "Products per row (mobile)"
+			},
+			"default": "grid-cols-2",
+			"options": [
+				{
+					"label": "1",
+					"value": "grid-cols-1"
+				},
+				{
+					"label": "2",
+					"value": "grid-cols-2"
+				},
+				{
+					"label": "3",
+					"value": "grid-cols-3"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "per_row_md",
+			"label": { 
+				"en": "Products per row (tablet)"
+			},
+			"default": "md:grid-cols-3",
+			"options": [
+				{
+					"label": "1",
+					"value": "md:grid-cols-1"
+				},
+				{
+					"label": "2",
+					"value": "md:grid-cols-2"
+				},
+				{
+					"label": "3",
+					"value": "md:grid-cols-3"
+				},
+				{
+					"label": "4",
+					"value": "md:grid-cols-4"
+				},
+				{
+					"label": "5",
+					"value": "md:grid-cols-5"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "per_row_lg",
+			"label": { 
+				"en": "Products per row (desktop)"
+			},
+			"default": "lg:grid-cols-4",
+			"options": [
+				{
+					"label": "1",
+					"value": "lg:grid-cols-1"
+				},
+				{
+					"label": "2",
+					"value": "lg:grid-cols-2"
+				},
+				{
+					"label": "3",
+					"value": "lg:grid-cols-3"
+				},
+				{
+					"label": "4",
+					"value": "lg:grid-cols-4"
+				},
+				{
+					"label": "5",
+					"value": "lg:grid-cols-5"
+				},
+				{
+					"label": "6",
+					"value": "lg:grid-cols-6"
+				},
+				{
+					"label": "7",
+					"value": "lg:grid-cols-7"
+				},
+				{
+					"label": "8",
+					"value": "lg:grid-cols-8"
+				}
+			]
+		},
+		{
+			"type": "checkbox",
+			"id": "hide_add_to_cart",
+			"label": "Hide Add to Cart button"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_view_all",
+			"label": {
+				"en": "Show 'View all' button"
+			},
+			"default": false
+		}
+	],
+	"presets": [{
+		"name": {
+			"en": "Featured collection"
+		},
+		"category": {
+			"en": "Collection"
+		}
+	}]
+}
+{% endschema %}
+  

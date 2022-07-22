@@ -1,0 +1,146 @@
+<div 
+	class="{{ section.settings.section_padding }}"
+	style="background-color: {{ section.settings.background }};"
+>
+    <div class="container mx-auto px-2 sm:px-4 xl:px-0">
+        <div class="text-center">
+            {% if section.settings.title != blank %}
+		        <h2 class="text-font-color-darkest font-bold text-3xl leading-8 mb-4 text-center">{{ section.settings.title | escape }}</h2>
+                
+            {% endif %}
+            {% if section.settings.subheading != blank %}
+                <div class="prose max-w-full text-center mb-4">{{ section.settings.subheading }}</div>
+            {% endif %}
+        </div>
+
+        {%- assign formId = 'Contact_' | append: section.id -%}
+        
+        {% form 'customer', id: formId, novalidate: 'novalidate', class: 'contact-form form-single-field' %}
+            {%- if form.posted_successfully? -%}
+                <p class="bg-green-100 text-green-600 rounded p-4 mb-4" tabindex="-1" data-form-status>
+                    {{ 'general.newsletter_form.confirmation' | t }}
+                </p>
+            {%- endif -%}
+            
+            <input type="hidden" name="contact[tags]" value="newsletter">
+        
+            <div class="flex max-w-lg mx-auto">
+                <input 
+                    type="email"
+                    name="contact[email]"
+                    id="{{ formId }}-email"
+                    class="rounded-md border border-gray-300 shadow-sm focus:border-button-primary h-12 focus:outline-none focus:shadow-none rounded-r-none block w-full{% if form.errors %} border-red-500{% endif %}"
+                    value="{{ form.email }}"
+                    placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                    aria-label="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                    aria-required="true"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    {% if form.errors %}
+                    aria-invalid="true"
+                    aria-describedby="{{ formId }}-email-error"
+                    data-form-status
+                    {% endif %}
+                >
+                <button 
+                    type="submit" 
+                    class="inline-flex items-center px-4 h-12 border border-gray-300 border-transparent font-medium rounded-r-md text-button-primary-text bg-button-primary hover:bg-button-primary-hover focus:outline-none focus:bg-button-primary-hover focus:shadow-outline-primary active:bg-button-primary-hover transition ease-in-out duration-150"
+                    name="commit" 
+                >
+                    {{ 'general.newsletter_form.submit' | t }}
+                </button>
+            </div>
+
+            {%- if form.errors contains 'email' -%}
+                <div 
+                    id="{{ formId }}-email-error"
+                    class="text-red-500"
+                >
+                    <span class="hidden">{{ 'general.accessibility.error' | t }} </span>
+                    <span>{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+                </div>
+            {%- endif -%}
+        {% endform %}
+    </div>
+</div>
+  
+  
+  
+{% schema %}
+{
+	"name": {
+		"en": "Newsletter"
+	},
+	"class": "index-section index-section--flush",
+	"settings": [{
+			"type": "text",
+			"id": "title",
+			"label": {
+				"en": "Heading"
+			},
+			"default": {
+				"en": "Subscribe to our newsletter"
+			}
+		},
+		{
+			"type": "richtext",
+			"id": "subheading",
+			"label": {
+				"en": "Subheading"
+			},
+			"default": {
+				"en": "<p>A short sentence describing what someone will receive by subscribing</p>"
+			}
+		},
+		{
+			"type": "select",
+			"id": "section_padding",
+			"label": {
+				"en": "Padding"
+			},
+			"default": "py-12",
+			"options": [
+				{
+					"value": "py-8",
+					"label": "Small"
+				},
+				{
+					"value": "py-12",
+					"label": "Normal"
+				},
+				{
+					"value": "py-16",
+					"label": "Large"
+				},
+				{
+					"value": "py-20",
+					"label": "Extra large"
+				}
+			]
+		},
+		{
+			"type": "color",
+			"id": "background",
+			"label": {
+				"en": "Background"
+			},
+			"default": "#EDF2F7"
+		},
+		{
+			"type": "paragraph",
+			"content": {
+				"en": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)"
+			}
+		}
+	],
+	"presets": [{
+		"name": {
+			"en": "Newsletter"
+		},
+		"category": {
+			"en": "Promotional"
+		}
+	}]
+}
+{% endschema %}
+  

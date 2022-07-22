@@ -1,0 +1,726 @@
+{%- assign social_icons = false -%}
+{%- assign show_payment_icons = false -%}
+
+{%- if section.settings.show_payment_icons -%}
+  {%- unless shop.enabled_payment_types == empty -%}
+    {%- assign show_payment_icons = true -%}
+  {%- endunless -%}
+{%- endif -%}
+
+
+{%- if
+  settings.social_twitter_link != blank
+  or settings.social_facebook_link != blank
+  or settings.social_pinterest_link != blank
+  or settings.social_instagram_link != blank
+  or settings.social_tumblr_link != blank
+  or settings.social_snapchat_link != blank
+  or settings.social_youtube_link != blank
+  or request.page_type == 'article'
+  or request.page_type == 'blog'
+-%}
+  {%- assign social_icons = true -%}
+{%- endif -%}
+
+
+{%- capture payment_icon_markup -%}
+	{%- if show_payment_icons -%}
+		<ul class="flex flex-wrap justify-center space-x-2">
+			{%- for type in shop.enabled_payment_types -%}
+				<li class="">
+					{{ type | payment_type_svg_tag: class: 'h-10 w-10' }}
+				</li>
+			{%- endfor -%}
+		</ul>
+  	{%- endif -%}
+{%- endcapture -%}
+
+
+
+<footer style="background-color: {{ section.settings.background_color }};">
+  <div class="container mx-auto px-4 xl:px-0 py-8">
+    <div class="flex flex-wrap -mx-4">
+      {%- for block in section.blocks -%}
+        
+        <div 
+            class="{{ block.settings.column_width_mobile }} {{ block.settings.column_width_tablet }} {{ block.settings.column_width_desktop }}"
+        >
+          <div class="px-2 md:px-4 py-4">
+            {%- if block.settings.title -%}
+			  	<h2 
+				  class="{{ section.settings.header_size }} mb-2 font-bold "
+				  style="color: {{ section.settings.header_color }};"
+				>{{ block.settings.title | escape }}</h2>
+            {%- endif -%}
+
+            {%- case block.type -%}
+              {%- when 'newsletter' -%}
+                <div class="">
+                  {%- assign formId = 'ContactFooter' -%}
+                  {% form 'customer', id: formId, novalidate: 'novalidate' %}
+                    {%- if form.posted_successfully? -%}
+                      <p class="">
+                        {{ 'general.newsletter_form.confirmation' | t }}
+                      </p>
+                    {%- endif -%}
+					<input type="hidden" name="contact[tags]" value="newsletter">
+					
+					{% capture content %}{{ block.settings.content | replace: '<p></p>', '' }}{% endcapture %}
+					{% if content %}
+						<div class="mb-2">
+							{{ content }}
+						</div>
+					{% endif %}
+                    
+                    <div class="flex">
+                        <input type="email"
+                            name="contact[email]"
+                            id="{{ formId }}-email"
+                            class="rounded-md border border-gray-300 shadow-sm focus:border-button-primary h-12 focus:outline-none rounded-r-none block w-full {% if form.errors %} border-red {% endif %}"
+                            value="{{ form.email }}"
+                            placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                            aria-label="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                            aria-required="true"
+                            required
+                            autocorrect="off"
+                            autocapitalize="off"
+                            {% if form.errors %}
+                            aria-invalid="true"
+                            aria-describedby="{{ formId }}-email-error"
+                            {% endif %}
+                        >
+                      
+                        <button 
+                            type="submit" 
+                            class="inline-flex items-center px-4 h-12 border border-gray-300 border-transparent font-medium rounded-r-md text-button-primary-text bg-button-primary hover:bg-button-primary-hover focus:outline-none focus:bg-button-primary-hover focus:shadow-outline-primary active:bg-button-primary-hover transition ease-in-out duration-150"
+                            name="commit" 
+                            id="Subscribe"
+                        >
+                            {{ 'general.newsletter_form.submit' | t }}
+                        </button>
+                    </div>
+
+                    {% if form.errors contains 'email' %}
+                      <span id="{{ formId }}-email-error" class="text-red">
+                        {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.
+                      </span>
+                    {% endif %}
+                  {% endform %}
+                </div>
+
+              {%- when 'text' -%}
+                {%- if block.settings.text != blank -%}
+                  <div style="color:{{ section.settings.paragraph_color }};">
+                      {{ block.settings.text }}
+                  </div>
+                {%- endif -%}
+
+              {%- when 'link_list' -%}
+                {%- assign footer_linklist = block.settings.menu -%}
+                  <ul class="list-disc list-inside space-y-1">
+                    {%- for link in linklists[footer_linklist].links -%}
+                      <li>
+                        <a 
+                            href="{{ link.url }}"
+							{% if link.current %} aria-current="page"{% endif %}
+							class="hover:underline"
+                            style="color:{{ section.settings.paragraph_color }};"
+                        >
+                          {{ link.title | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+
+            {%- endcase -%}
+
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <hr class="border-t">
+
+  {%- assign socials = "Facebook Twitter Pinterest Instagram Tumblr Snapchat YouTube Vimeo TikTok" | split: ' ' -%}
+
+    <div class="container mx-auto px-2 sm:px-4 xl:px-0 py-4">
+		{% if show_payment_icons %}
+			<div class="mb-4">{{ payment_icon_markup }}</div>
+		{% endif %}
+		<div class="flex flex-col md:flex-row items-center justify-between">
+
+            {%- if social_icons -%}
+                {% capture size %}h-6 w-6 fill-current hover:opacity-75{% endcapture %}
+                <div class="flex space-x-2">
+                    {%- for social in socials -%}
+                        {%- assign social_link = social | prepend: 'social_' | append: '_link' | downcase -%}
+                        {%- assign icon = social | downcase -%}
+
+                        {%- if settings[social_link] != blank -%}
+                            <a 
+                                href="{{ settings[social_link] | escape }}" 
+								target="_blank"
+								style="color:{{ section.settings.paragraph_color }};"
+                            >
+                                {% include "icons", name: icon, size: size %}
+                            </a>
+                        {%- endif -%}
+                    {%- endfor -%}
+                </div>
+            {%- endif -%}
+
+            {% if show_payment_icons == false and social_icon == false %}
+                <div></div>
+            {% endif %}
+
+			<div 
+				class="text-xs hover:underline mt-2 md:mt-0"
+				
+				style="color:{{ section.settings.paragraph_color }};"
+			>
+                &copy; {{ 'now' | date: "%Y" }} - {{ shop.name | link_to: routes.root_url }} - <a href="https://airthemeone.com/">Powered by Air Theme One</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+{% schema %}
+{
+	"name": {
+		"en": "Footer"
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": {
+				"en": "Layout"
+			}
+		},
+		{
+			"type": "select",
+			"id": "header_size",
+			"label": "Header text size",
+			"default": "text-xl sm:text-2xl",
+			"options": [
+				{
+					"label": "Extra Small",
+					"value": "text-base sm:text-lg"
+
+				},
+				{
+					"label": "Small",
+					"value": "text-lg sm:text-xl"
+
+				},
+				{
+					"label": "Medium",
+					"value": "text-xl sm:text-2xl"
+
+				},
+				{
+					"label": "Large",
+					"value": "text-2xl sm:text-3xl"
+
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": {
+				"en": "Payment methods"
+			}
+		},
+		{
+			"type": "checkbox",
+			"id": "show_payment_icons",
+			"label": {
+				"en": "Show payment icons"
+			},
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": {
+				"en": "Color"
+			}
+		},
+		{
+			"type": "color",
+			"id": "background_color",
+			"label": {
+			  "en": "Background"
+			},
+			"default": "#EDF2F7"
+		},
+		{
+			"type": "color",
+			"id": "header_color",
+			"label": {
+			  "en": "Header"
+			},
+			"default": "#1A202C"
+		},
+		{
+			"type": "color",
+			"id": "paragraph_color",
+			"label": {
+			  "en": "Paragraph"
+			},
+			"default": "#4A5568"
+		}
+	],
+	"blocks": [{
+			"type": "link_list",
+			"name": {
+				"en": "Menu"
+			},
+			"settings": [{
+					"type": "text",
+					"id": "title",
+					"label": {
+						"en": "Heading"
+					},
+					"default": {
+						"en": "Quick links"
+					}
+				},
+				{
+					"type": "link_list",
+					"id": "menu",
+					"label": {
+						"en": "Menu"
+					},
+					"default": "footer"
+				},
+				{
+					"type": "select",
+					"id": "column_width_mobile",
+					"label": "Column Width - Mobile",
+					"default": "w-full",
+					"options": [{
+							"value": "w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "w-full",
+							"label": "100%"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "column_width_tablet",
+					"label": "Column Width - Tablet",
+					"default": "md:w-1/3",
+					"options": [{
+							"value": "md:w-1/6",
+							"label": "16.6%"
+						},
+						{
+							"value": "md:w-1/5",
+							"label": "20%"
+						},
+						{
+							"value": "md:w-1/4",
+							"label": "25%"
+						},
+						{
+							"value": "md:w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "md:w-2/5",
+							"label": "40%"
+						},
+						{
+							"value": "md:w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "md:w-3/5",
+							"label": "60%"
+						},
+						{
+							"value": "md:w-2/3",
+							"label": "66.6%"
+						},
+						{
+							"value": "md:w-4/5",
+							"label": "80%"
+						},
+						{
+							"value": "md:w-5/6",
+							"label": "83.3%"
+						},
+						{
+							"value": "md:w-full",
+							"label": "100%"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "column_width_desktop",
+					"label": "Column Width - Desktop",
+					"default": "lg:w-1/3",
+					"options": [{
+							"value": "lg:w-1/6",
+							"label": "16.6%"
+						},
+						{
+							"value": "lg:w-1/5",
+							"label": "20%"
+						},
+						{
+							"value": "lg:w-1/4",
+							"label": "25%"
+						},
+						{
+							"value": "lg:w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "lg:w-2/5",
+							"label": "40%"
+						},
+						{
+							"value": "lg:w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "lg:w-3/5",
+							"label": "60%"
+						},
+						{
+							"value": "lg:w-2/3",
+							"label": "66.6%"
+						},
+						{
+							"value": "lg:w-4/5",
+							"label": "80%"
+						},
+						{
+							"value": "lg:w-5/6",
+							"label": "83.3%"
+						},
+						{
+							"value": "lg:w-full",
+							"label": "100%"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "text",
+			"name": {
+				"en": "Text"
+			},
+			"settings": [{
+					"type": "text",
+					"id": "title",
+					"label": {
+						"en": "Heading"
+					},
+					"default": {
+						"en": "Talk about your business"
+					}
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": {
+						"en": "Text"
+					},
+					"default": {
+						"en": "<p>Share store details, promotions, or brand content with your customers.</p>"
+					}
+				},
+				{
+					"type": "select",
+					"id": "column_width_mobile",
+					"label": "Column Width - Mobile",
+					"default": "w-full",
+					"options": [{
+							"value": "w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "w-full",
+							"label": "100%"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "column_width_tablet",
+					"label": "Column Width - Tablet",
+					"default": "md:w-1/3",
+					"options": [{
+							"value": "md:w-1/6",
+							"label": "16.6%"
+						},
+						{
+							"value": "md:w-1/5",
+							"label": "20%"
+						},
+						{
+							"value": "md:w-1/4",
+							"label": "25%"
+						},
+						{
+							"value": "md:w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "md:w-2/5",
+							"label": "40%"
+						},
+						{
+							"value": "md:w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "md:w-3/5",
+							"label": "60%"
+						},
+						{
+							"value": "md:w-2/3",
+							"label": "66.6%"
+						},
+						{
+							"value": "md:w-4/5",
+							"label": "80%"
+						},
+						{
+							"value": "md:w-5/6",
+							"label": "83.3%"
+						},
+						{
+							"value": "md:w-full",
+							"label": "100%"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "column_width_desktop",
+					"label": "Column Width - Desktop",
+					"default": "lg:w-1/3",
+					"options": [{
+							"value": "lg:w-1/6",
+							"label": "16.6%"
+						},
+						{
+							"value": "lg:w-1/5",
+							"label": "20%"
+						},
+						{
+							"value": "lg:w-1/4",
+							"label": "25%"
+						},
+						{
+							"value": "lg:w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "lg:w-2/5",
+							"label": "40%"
+						},
+						{
+							"value": "lg:w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "lg:w-3/5",
+							"label": "60%"
+						},
+						{
+							"value": "lg:w-2/3",
+							"label": "66.6%"
+						},
+						{
+							"value": "lg:w-4/5",
+							"label": "80%"
+						},
+						{
+							"value": "lg:w-5/6",
+							"label": "83.3%"
+						},
+						{
+							"value": "lg:w-full",
+							"label": "100%"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "newsletter",
+			"limit": 1,
+			"name": {
+				"en": "Newsletter signup"
+			},
+			"settings": [
+				{
+					"type": "text",
+					"id": "title",
+					"label": {
+						"en": "Heading"
+					},
+					"info": {
+						"en": "Subscribers will be added to your “accepts marketing” [customer list.](/admin/customers?query=&accepts_marketing=1)"
+					},
+					"default": {
+						"en": "Newsletter"
+					}
+				},
+				{
+					"type": "richtext",
+					"id": "content",
+					"label": {
+						"en": "Content"
+					},
+					"default": {
+						"en": "<p></p>"
+					}
+				},
+				{
+					"type": "select",
+					"id": "column_width_mobile",
+					"label": "Column Width - Mobile",
+					"default": "w-full",
+					"options": [{
+							"value": "w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "w-full",
+							"label": "100%"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "column_width_tablet",
+					"label": "Column Width - Tablet",
+					"default": "md:w-1/3",
+					"options": [{
+							"value": "md:w-1/6",
+							"label": "16.6%"
+						},
+						{
+							"value": "md:w-1/5",
+							"label": "20%"
+						},
+						{
+							"value": "md:w-1/4",
+							"label": "25%"
+						},
+						{
+							"value": "md:w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "md:w-2/5",
+							"label": "40%"
+						},
+						{
+							"value": "md:w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "md:w-3/5",
+							"label": "60%"
+						},
+						{
+							"value": "md:w-2/3",
+							"label": "66.6%"
+						},
+						{
+							"value": "md:w-4/5",
+							"label": "80%"
+						},
+						{
+							"value": "md:w-5/6",
+							"label": "83.3%"
+						},
+						{
+							"value": "md:w-full",
+							"label": "100%"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "column_width_desktop",
+					"label": "Column Width - Desktop",
+					"default": "lg:w-1/3",
+					"options": [{
+							"value": "lg:w-1/6",
+							"label": "16.6%"
+						},
+						{
+							"value": "lg:w-1/5",
+							"label": "20%"
+						},
+						{
+							"value": "lg:w-1/4",
+							"label": "25%"
+						},
+						{
+							"value": "lg:w-1/3",
+							"label": "33.3%"
+						},
+						{
+							"value": "lg:w-2/5",
+							"label": "40%"
+						},
+						{
+							"value": "lg:w-1/2",
+							"label": "50%"
+						},
+						{
+							"value": "lg:w-3/5",
+							"label": "60%"
+						},
+						{
+							"value": "lg:w-2/3",
+							"label": "66.6%"
+						},
+						{
+							"value": "lg:w-4/5",
+							"label": "80%"
+						},
+						{
+							"value": "lg:w-5/6",
+							"label": "83.3%"
+						},
+						{
+							"value": "lg:w-full",
+							"label": "100%"
+						}
+					]
+				}
+
+
+			]
+		}
+	]
+}
+{% endschema %}

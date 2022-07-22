@@ -1,0 +1,84 @@
+<div class="container mx-auto px-2 sm:px-4 xl:px-0 py-8">
+
+  <div class="max-w-xl mx-auto">
+    <article>
+        <div class="w-full">
+            <h1 class="text-4xl font-extrabold leading-tight text-font-color-darkest mb-4 {{ section.settings.header_alignment }}">{{ page.title }}</h1>
+        </div>
+    
+        <div class="prose md:prose-lg max-w-none text-font-color-light">
+          {{ page.content }}
+        </div>
+        
+        <div class="mt-12">
+          {% form 'contact' %}
+            {% if form.posted_successfully? %} Thank you for your contact {% endif %}
+            
+            {{ form.errors | default_errors }}
+          
+            <div class="mb-4">
+              <label 
+                for="ContactFormName" 
+                class="block text-sm font-medium leading-5 text-font-color-dark"
+              >{{ "general.form.name" | t}}</label>
+  
+              <input 
+                type="text" 
+                id="ContactFormName" 
+                name="contact[name]"
+                class="rounded-md border border-gray-300 shadow-sm focus:border-button-primary w-full"
+              >
+            </div>
+  
+            <div class="mb-4">
+              <label 
+                for="ContactFormEmail"
+                class="block text-sm font-medium leading-5 text-font-color-dark"
+              >{{ "general.form.email" | t}}</label>
+  
+              <input 
+                type="email" 
+                id="ContactFormEmail" 
+                name="contact[email]"
+                class="rounded-md border border-gray-300 shadow-sm focus:border-button-primary w-full"
+              >
+            </div>
+  
+            <div class="mb-4">
+              <label 
+                for="ContactFormPhone"
+                class="block text-sm font-medium leading-5 text-font-color-dark"
+              >{{ "general.form.phone" | t}}</label>
+              
+              <input 
+                type="tel" 
+                id="ContactFormPhone" 
+                name="contact[phone]"
+                class="rounded-md border border-gray-300 shadow-sm focus:border-button-primary w-full"
+              >
+            </div>
+  
+            <div class="mb-4">
+              <label 
+                for="ContactFormMessage"
+                class="block text-sm font-medium leading-5 text-font-color-dark"
+              >{{ "general.form.message" | t}}</label>
+              
+              <textarea 
+                rows="5" 
+                id="ContactFormMessage" 
+                class="form-textarea w-full"
+                name="contact[body]"></textarea>
+            </div>
+  
+  
+            <input 
+              type="submit" 
+              value="{{ "general.form.send" | t}}"
+              class="flex items-center cursor-pointer w-full justify-center py-3 border border-gray-300 border-transparent text-sm leading-5 font-medium rounded-md text-button-primary-text bg-button-primary hover:bg-button-primary-hover focus:outline-none focus:bg-button-primary-hover focus:shadow-outline-primary active:bg-button-primary-hover transition ease-in-out duration-150"
+            >
+          {% endform %}
+        </div>
+
+    </article>
+</div>

@@ -1,0 +1,210 @@
+{% paginate collection.products by section.settings.pagination_limit %}
+{% if section.settings.collection_breadcrumb %}
+    <div class="container mx-auto flex justify-between px-2 sm:px-4 xl:px-0 pt-8">
+        
+        {% include 'breadcrumbs' %}
+        
+        <div class="text-sm text-font-color-light">
+            {% if paginate.pages != 0 %}
+                {{ 'general.breadcrumbs.page' | t: current_page: paginate.current_page, pages: paginate.pages }}
+            {% endif %}    
+        </div>
+    </div>
+{%- else -%}
+    <div class="pt-8"></div>    
+{% endif %}
+
+<div class="container mx-auto px-2 sm:px-4 xl:px-0 py-4">
+    <div class="flex justify-between items-center">
+        <h1 
+            class="text-2xl font-bold leading-7 text-font-color-darkest sm:text-3xl sm:leading-9 sm:truncate"
+        >{{ collection.title }}</h1>
+
+        {% if section.settings.collection_sort %}
+            <div class="hidden md:block">
+                {% include 'collection-sort-by'  %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if collection.description != blank %}
+    <div class="container mx-auto px-2 sm:px-4 xl:px-0">
+        <div class="text-font-color-darkest">
+            {{ collection.description }}
+        </div>
+    </div>
+{% endif %}
+
+{% if section.settings.collection_sort %}
+    <div class="md:hidden container mx-auto px-2 sm:px-4 flex justify-end pt-4">
+        {% include 'collection-sort-by'  %}
+    </div>
+{% endif %}
+
+{% if collection.products.size == 0 %}
+    <div class="">
+        <p class="italic">{{ 'collections.general.no_matches' | t }}</p>
+    </div>
+{% else %}
+    {% include 'product-loop', sidebar: sidebar, hide_add_to_cart: section.settings.hide_add_to_cart,  per_row_sm: section.settings.per_row_sm, per_row_md: section.settings.per_row_md, per_row_lg: section.settings.per_row_lg %}
+{% endif %}
+
+<div class="container mx-auto px-2 sm:px-4 xl:px-0 py-8">
+    {% include 'pagination' with sidebar %}
+</div>
+
+{% endpaginate %}
+
+<script>
+    var sort_by = function() {
+        let sort_by = 'manual';
+
+        if(window.location.search.match(/sort_by=([a-z-]+)/)) {
+            const matches = window.location.search.match(/sort_by=([a-z-]+)/);
+            sort_by = matches[1];
+        }   
+
+        return {
+            sort_by: sort_by,
+        }
+    }
+
+    var change_sort_by = function(value) {
+        window.location.search = 'sort_by=' + value;
+    }
+</script>
+
+
+{% schema %}
+{
+	"name": "Collection",
+	"class": "collection-template-section",
+    "settings": [
+        {
+			"type": "checkbox",
+			"id": "collection_breadcrumb",
+			"label": "Show breadcrumb links",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "collection_sort",
+			"label": "Enable collection sorting"
+		},
+		{
+			"type": "checkbox",
+			"id": "hide_add_to_cart",
+			"label": "Hide Add to Cart button"
+		},
+		{
+			"type": "header",
+			"content": "Products"
+		},
+		{
+			"type": "select",
+			"id": "per_row_sm",
+			"label": { 
+				"en": "Products per row (mobile)"
+			},
+			"default": "grid-cols-2",
+			"options": [
+				{
+					"label": "1",
+					"value": "grid-cols-1"
+				},
+				{
+					"label": "2",
+					"value": "grid-cols-2"
+				},
+				{
+					"label": "3",
+					"value": "grid-cols-3"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "per_row_md",
+			"label": { 
+				"en": "Products per row (tablet)"
+			},
+			"default": "md:grid-cols-3",
+			"options": [
+				{
+					"label": "1",
+					"value": "md:grid-cols-1"
+				},
+				{
+					"label": "2",
+					"value": "md:grid-cols-2"
+				},
+				{
+					"label": "3",
+					"value": "md:grid-cols-3"
+				},
+				{
+					"label": "4",
+					"value": "md:grid-cols-4"
+				},
+				{
+					"label": "5",
+					"value": "md:grid-cols-5"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "per_row_lg",
+			"label": { 
+				"en": "Products per row (desktop)"
+			},
+			"default": "lg:grid-cols-4",
+			"options": [
+				{
+					"label": "1",
+					"value": "lg:grid-cols-1"
+				},
+				{
+					"label": "2",
+					"value": "lg:grid-cols-2"
+				},
+				{
+					"label": "3",
+					"value": "lg:grid-cols-3"
+				},
+				{
+					"label": "4",
+					"value": "lg:grid-cols-4"
+				},
+				{
+					"label": "5",
+					"value": "lg:grid-cols-5"
+				},
+				{
+					"label": "6",
+					"value": "lg:grid-cols-6"
+				},
+				{
+					"label": "7",
+					"value": "lg:grid-cols-7"
+				},
+				{
+					"label": "8",
+					"value": "lg:grid-cols-8"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "pagination_limit",
+			"label": "Products per page",
+			"min": 1,
+			"max": 100,
+			"step": 1,
+			"default": 48
+		}
+	]
+}
+
+{% endschema %}
